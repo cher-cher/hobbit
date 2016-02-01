@@ -1,16 +1,45 @@
+#ifndef Player_H
+#define Player_H
 #include <SFML/Graphics.hpp>
 #include <iostream> 
+//#include "map.h"
 
 using namespace sf;
 
-struct Player 
+struct Position
 {
-	Sprite elf;
 	float x;
 	float y;
 
+	Position(float newX, float newY)
+		: x(newX)
+		, y(newY)
+	{ };
 };
 
-float getPlayerCoordinateX(Player & player);
-float getPlayerCoordinateY(Player & player);
+enum Direction
+{
+	RIGHT = 0,
+	LEFT = 1,
+	DOWN = 2,
+	UP = 3
+};
+
+struct Player
+{
+	float currentAnimationFrame = 0;
+	unsigned animationFramesCount = 3;
+	Sprite elf;
+	float x = 1792;
+	float y = 640;
+	float dx;
+	float dy;
+	Direction direction = Direction::RIGHT;
+	float speed = 0;
+};
+
+Position SyncPlayerPostion(Player & player);
 void DrawPlayer(RenderWindow &window, Player * player);
+void CheckPlayerCollision(Player & player);
+void Update(float time, Player & player);
+#endif

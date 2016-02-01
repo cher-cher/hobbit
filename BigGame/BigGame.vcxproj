@@ -153,6 +153,7 @@
     <ClCompile Include="player.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="const.h" />
     <ClInclude Include="map.h" />
     <ClInclude Include="player.h" />
     <ClInclude Include="view.h" />
