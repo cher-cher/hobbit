@@ -103,23 +103,23 @@ float ProcessInput(Player &player, float time)
 
 	if ((Keyboard::isKeyPressed(Keyboard::Left))) {
 		player.direction = Direction::LEFT;
-		player.elf.setTextureRect(IntRect(32 * int(player.currentAnimationFrame), 48, 32, 48));
+		player.elf.setTextureRect(IntRect(WIDTH_PLAYER * int(player.currentAnimationFrame), HEIGHT_PLAYER, WIDTH_PLAYER, HEIGHT_PLAYER));
 	}
 
 	if ((Keyboard::isKeyPressed(Keyboard::Right))) {
 		player.direction = Direction::RIGHT;
-		player.elf.setTextureRect(IntRect(32 * int(player.currentAnimationFrame), 96, 32, 48));
+		player.elf.setTextureRect(IntRect(WIDTH_PLAYER * int(player.currentAnimationFrame), 2 * HEIGHT_PLAYER, WIDTH_PLAYER, HEIGHT_PLAYER));
 	}
 
 
 	if ((Keyboard::isKeyPressed(Keyboard::Up))) {
 		player.direction = Direction::UP;
-		player.elf.setTextureRect(IntRect(32 * int(player.currentAnimationFrame), 144, 32, 48));
+		player.elf.setTextureRect(IntRect(WIDTH_PLAYER * int(player.currentAnimationFrame), 3 * HEIGHT_PLAYER, WIDTH_PLAYER, HEIGHT_PLAYER));
 	}
 
 	if ((Keyboard::isKeyPressed(Keyboard::Down))) {
 		player.direction = Direction::DOWN;
-		player.elf.setTextureRect(IntRect(32 * int(player.currentAnimationFrame), 0, 32, 48));
+		player.elf.setTextureRect(IntRect(WIDTH_PLAYER * int(player.currentAnimationFrame), 0 * HEIGHT_PLAYER, WIDTH_PLAYER, HEIGHT_PLAYER));
 	}
 
 	if (syncPlayerNeeded)
@@ -139,6 +139,10 @@ float DrawMap(Sprite &s_map, float CurrentFrameMoney, float time, Sprite &s_mone
 			if (TileMap[i][j] == 's')
 			{
 				s_map.setTextureRect(IntRect(0, 0, SIZE_BLOCK, SIZE_BLOCK));
+			}
+			if (TileMap[i][j] == 'h')
+			{
+				s_map.setTextureRect(IntRect(10 * SIZE_BLOCK, 0, SIZE_BLOCK, SIZE_BLOCK));
 			}
 			if (TileMap[i][j] == 'w')
 			{
@@ -184,7 +188,7 @@ int main()
 	herotexture.loadFromFile("images/hero4.png");
 
 	player.elf.setTexture(herotexture);
-	player.elf.setTextureRect(IntRect(0, 0, 32, 48));
+	player.elf.setTextureRect(IntRect(0, 0, 64, 96));
 	//player.elf.setPosition(1792, 768);
 
 	//float currentPlayerAnimationFrame = 0;//хранит текущий кадр
@@ -204,8 +208,11 @@ int main()
 			if (event.type == Event::Closed)
 				window.close();
 		}
-
-		player.currentAnimationFrame = ProcessInput(player, time);
+		if (player.life)
+		{
+			player.currentAnimationFrame = ProcessInput(player, time);
+		}
+		
 
 		GetPlayerCoordinateForView(player.x, player.y);
 		Update(time, player);

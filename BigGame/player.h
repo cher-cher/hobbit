@@ -36,6 +36,8 @@ struct Player
 	float dy;
 	Direction direction = Direction::RIGHT;
 	float speed = 0;
+	int health = 100;
+	bool life = true;
 };
 
 Position SyncPlayerPostion(Player & player);
