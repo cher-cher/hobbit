@@ -30,8 +30,8 @@ struct Player
 	float currentAnimationFrame = 0;
 	unsigned animationFramesCount = 3;
 	Sprite elf;
-	float x = 1792;
-	float y = 640;
+	float x = 35;
+	float y = 35;
 	float dx;
 	float dy;
 	Direction direction = Direction::RIGHT;

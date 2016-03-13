@@ -7,9 +7,45 @@
 
 using namespace sf;
 
-void CheckPlayerCollision(Player & player, float time)//ф-ция взаимодействия с картой
+void Menu(RenderWindow & window) 
 {
+	Texture menuTexture1, menuTexture2, menuBackground;
+	menuTexture1.loadFromFile("images/Start1.png");
+	menuTexture2.loadFromFile("images/Exit1.png");
+	menuBackground.loadFromFile("images/BackGround11.png");
+	Sprite menu1(menuTexture1), menu2(menuTexture2), menuBg(menuBackground);
+	bool isMenu = 1;
+	int menuNum = 0;
+	menu1.setPosition(300, 225);
+	menu2.setPosition(300, 275);
+	menuBg.setPosition(0, 0);
 
+	while (isMenu)
+	{
+		menu1.setColor(Color::Black);
+		menu2.setColor(Color::Black);
+		menuNum = 0;
+
+		if (IntRect(300, 250, 300, 75).contains(Mouse::getPosition(window))) { menu1.setColor(Color(192, 192, 192)); menuNum = 1; }
+		if (IntRect(300, 300, 300, 75).contains(Mouse::getPosition(window))) { menu2.setColor(Color(192, 192, 192)); menuNum = 2; }
+
+		if (Mouse::isButtonPressed(Mouse::Left))
+		{
+			if (menuNum == 1) isMenu = false;//если нажали первую кнопку, то выходим из меню 
+			if (menuNum == 2) { window.close(); isMenu = false; }
+
+		}
+
+		window.draw(menuBg);
+		window.draw(menu1);
+		window.draw(menu2);
+
+		window.display();
+	}
+}
+
+void CheckPlayerCollision(Player & player, float time)
+{
 	for (int i = player.y / SIZE_BLOCK; i < (player.y + HEIGHT_PLAYER) / SIZE_BLOCK; i++)//проходимся по тайликам, контактирующим с игроком,, то есть по всем квадратикам размера 32*32, которые мы окрашивали в 9 уроке. про условия читайте ниже.
 		for (int j = player.x / SIZE_BLOCK; j < (player.x + WIDTH_PLAYER) / SIZE_BLOCK; j++)//икс делим на 32, тем самым получаем левый квадратик, с которым персонаж соприкасается. (он ведь больше размера 32*32, поэтому может одновременно стоять на нескольких квадратах). А j<(x + w) / 32 - условие ограничения координат по иксу. то есть координата самого правого квадрата, который соприкасается с персонажем. таким образом идем в цикле слева направо по иксу, проходя по от левого квадрата (соприкасающегося с героем), до правого квадрата (соприкасающегося с героем)
 		{
@@ -85,7 +121,6 @@ void Update(float time, Player & player)
 	CheckPlayerCollision(player, time);
 }
 
-///////////////////////////////////////////Управление персонажем с анимацией////////////////////////////////////////////////////////////////////////
 float ProcessInput(Player &player, float time)
 {
 	bool syncPlayerNeeded = false;
@@ -95,7 +130,7 @@ float ProcessInput(Player &player, float time)
 		|| (Keyboard::isKeyPressed(Keyboard::Up))
 		|| (Keyboard::isKeyPressed(Keyboard::Down)))
 	{
-		player.speed = 0.1;
+		player.speed = 0.15;
 		player.currentAnimationFrame += 0.005*time;
 		player.currentAnimationFrame = std::fmod(player.currentAnimationFrame, player.animationFramesCount);
 		syncPlayerNeeded = true;
@@ -160,13 +195,15 @@ float DrawMap(Sprite &s_map, float CurrentFrameMoney, float time, Sprite &s_mone
 			window.draw(s_map);
 			window.draw(s_money);
 		}
-	}		return CurrentFrameMoney;
+	}
+	return CurrentFrameMoney;
 }
 
 int main()
 {
 	Player player;
 	RenderWindow window(sf::VideoMode(900, 600), "big game");
+	Menu(window);
 
 	view.reset(FloatRect(0, 0, 1000, 600));
 
@@ -185,13 +222,11 @@ int main()
 	s_money.setTexture(money);//заливаем текстуру спрайтом
 
 	Texture herotexture;
-	herotexture.loadFromFile("images/hero4.png");
+	herotexture.loadFromFile("images/hero1.png");
 
 	player.elf.setTexture(herotexture);
-	player.elf.setTextureRect(IntRect(0, 0, 64, 96));
-	//player.elf.setPosition(1792, 768);
+	player.elf.setTextureRect(IntRect(0, 0, WIDTH_PLAYER, HEIGHT_PLAYER));
 
-	//float currentPlayerAnimationFrame = 0;//хранит текущий кадр
 	float CurrentFrameMoney = 0;
 	Clock clock;
 
