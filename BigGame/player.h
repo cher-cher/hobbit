@@ -1,4 +1,4 @@
-#ifndef Player_H
+﻿#ifndef Player_H
 #define Player_H
 #include <SFML/Graphics.hpp>
 #include <iostream> 

@@ -1,4 +1,4 @@
-#ifndef Map_H 
+﻿#ifndef Map_H 
 #define Map_H
 #include <SFML\Graphics.hpp>
 #include "const.h"

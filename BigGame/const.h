@@ -1,7 +1,7 @@
-#pragma once
+п»ї#pragma once
 
 const int SIZE_BLOCK = 32;
 const int HEIGHT_PLAYER = 53;
 const int WIDTH_PLAYER = 38;
-const int HEIGHT_MAP = 35;//размер карты высота
-const int WIDTH_MAP = 70;//размер карты ширина 
+const int HEIGHT_MAP = 35;//СЂР°Р·РјРµСЂ РєР°СЂС‚С‹ РІС‹СЃРѕС‚Р°
+const int WIDTH_MAP = 70;//СЂР°Р·РјРµСЂ РєР°СЂС‚С‹ С€РёСЂРёРЅР° 

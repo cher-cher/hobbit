@@ -1,30 +1,30 @@
-#include <SFML/Graphics.hpp>
+п»ї#include <SFML/Graphics.hpp>
 #include "const.h"
 
 using namespace sf;
 
 View view;
 
-void GetPlayerCoordinateForView(float x, float y) { //функция для считывания координат игрока
-	float tempX = x; float tempY = y;//считываем коорд игрока и проверяем их, чтобы убрать края
+void GetPlayerCoordinateForView(float x, float y) { //С„СѓРЅРєС†РёСЏ РґР»СЏ СЃС‡РёС‚С‹РІР°РЅРёСЏ РєРѕРѕСЂРґРёРЅР°С‚ РёРіСЂРѕРєР°
+	float tempX = x; float tempY = y;//СЃС‡РёС‚С‹РІР°РµРј РєРѕРѕСЂРґ РёРіСЂРѕРєР° Рё РїСЂРѕРІРµСЂСЏРµРј РёС…, С‡С‚РѕР±С‹ СѓР±СЂР°С‚СЊ РєСЂР°СЏ
 
 	if (x < 500) tempX = 500;
 	if (x > 1740) tempX = 1740;
 	if (y < 300) tempY = 300;
 	if (y > 820) tempY = 820;
 
-	view.setCenter(tempX, tempY); //следим за игроком, передавая его координаты. 
+	view.setCenter(tempX, tempY); //СЃР»РµРґРёРј Р·Р° РёРіСЂРѕРєРѕРј, РїРµСЂРµРґР°РІР°СЏ РµРіРѕ РєРѕРѕСЂРґРёРЅР°С‚С‹. 
 }
 
-void ViewMap(float time, Player & player) { //функция для перемещения камеры по карте. принимает время sfml
+void ViewMap(float time, Player & player) { //С„СѓРЅРєС†РёСЏ РґР»СЏ РїРµСЂРµРјРµС‰РµРЅРёСЏ РєР°РјРµСЂС‹ РїРѕ РєР°СЂС‚Рµ. РїСЂРёРЅРёРјР°РµС‚ РІСЂРµРјСЏ sfml
 
 	float speed = player.speed;
 
 	if (Keyboard::isKeyPressed(Keyboard::Left)) {
-		view.move(-speed * time, 0);//скроллим карту влево 
+		view.move(-speed * time, 0);//СЃРєСЂРѕР»Р»РёРј РєР°СЂС‚Сѓ РІР»РµРІРѕ 
 	}
 	if (Keyboard::isKeyPressed(Keyboard::Right)) {
-		view.move(speed * time, 0);//скроллим карту вправо 
+		view.move(speed * time, 0);//СЃРєСЂРѕР»Р»РёРј РєР°СЂС‚Сѓ РІРїСЂР°РІРѕ 
 	}
 	if (Keyboard::isKeyPressed(Keyboard::Up)) {
 		view.move(0, -speed * time);
