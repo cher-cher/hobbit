@@ -8,16 +8,16 @@ View view;
 void GetPlayerCoordinateForView(float x, float y) { //функция для считывания координат игрока
 	float tempX = x; float tempY = y;//считываем коорд игрока и проверяем их, чтобы убрать края
 
-	if (x < 500) tempX = 500;
-	if (x > 1740) tempX = 1740;
+	/*if (x < 450) tempX = 450;
+	if (x > 1790) tempX = 1790;
 	if (y < 300) tempY = 300;
-	if (y > 820) tempY = 820;
+	if (y > 820) tempY = 820;*/
 
 	view.setCenter(tempX, tempY); //следим за игроком, передавая его координаты. 
 }
 
-void ViewMap(float time, Player & player) { //функция для перемещения камеры по карте. принимает время sfml
-
+void ViewMap(float time, Player & player) //функция для перемещения камеры по карте. принимает время sfml
+{ 
 	float speed = player.speed;
 
 	if (Keyboard::isKeyPressed(Keyboard::Left)) {
