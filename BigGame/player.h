@@ -2,6 +2,7 @@
 #define Player_H
 #include <SFML/Graphics.hpp>
 #include <iostream> 
+#include "const.h"
 //#include "map.h"
 
 using namespace sf;
@@ -17,13 +18,7 @@ struct Position
 	{ };
 };
 
-enum Direction
-{
-	RIGHT = 0,
-	LEFT = 1,
-	DOWN = 2,
-	UP = 3
-};
+
 
 struct Player
 {
@@ -38,10 +33,12 @@ struct Player
 	float speed = 0;
 	int health = 100;
 	bool life = true;
+	IntRect rect;
 };
 
 Position SyncPlayerPostion(Player & player);
 void DrawPlayer(RenderWindow &window, Player * player);
-void CheckPlayerCollision(Player & player);
-void Update(float time, Player & player);
+void CheckPlayerCollision(Player & player, float time, int &counterCoins, String TileMap[]);
+void UpdatePlayer(float time, Player & player, int &counterCoins, String TileMap[]);
+float ProcessInput(Player &player, float time);
 #endif

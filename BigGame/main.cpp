@@ -7,6 +7,8 @@
 #include "view.h"
 #include "const.h"
 #include <time.h>
+#include "nazgul.h"
+#include <cmath>
 
 using namespace sf;
 using namespace std;
@@ -66,129 +68,6 @@ void Menu(RenderWindow & window)
 	}
 }
 
-void CheckPlayerCollision(Player & player, float time, int &counterCoins)
-{
-	for (int i = player.y / SIZE_BLOCK; i < (player.y + HEIGHT_PLAYER) / SIZE_BLOCK; i++)
-		for (int j = player.x / SIZE_BLOCK; j < (player.x + WIDTH_PLAYER) / SIZE_BLOCK; j++)
-		{
-			if (TileMap[i][j] == 'w')
-			{
-				Vector2f pos = player.elf.getPosition();
-				if (player.dy > 0)
-				{
-					player.y = i * SIZE_BLOCK - HEIGHT_PLAYER;
-					pos.y -= player.dy*time;
-				}
-				if (player.dy < 0)
-				{
-					player.y = i * SIZE_BLOCK + SIZE_BLOCK;
-					pos.y -= player.dy*time;
-				}
-				if (player.dx > 0)
-				{
-					player.x = j * SIZE_BLOCK - WIDTH_PLAYER;
-					pos.x -= player.dx*time;
-				}
-				if (player.dx < 0)
-				{
-					player.x = j * SIZE_BLOCK + SIZE_BLOCK;
-					pos.x -= player.dx*time;
-				}
-				player.elf.setPosition(pos);
-			}
-
-			if (TileMap[i][j] == 'm') 
-			{ 
-				TileMap[i][j] = 's';
-				counterCoins += 1;
-			}
-		}
-}
-
-void Update(float time, Player & player, int &counterCoins)
-{
-	switch (player.direction)
-	{
-	case Direction::RIGHT:
-	{
-		player.dx = player.speed;
-		player.dy = 0;
-		break;
-	}
-	case Direction::LEFT:
-	{
-		player.dx = -player.speed;
-		player.dy = 0;
-		break;
-	}
-	case Direction::DOWN:
-	{
-		player.dx = 0;
-		player.dy = player.speed;
-		break;
-	}
-	case Direction::UP:
-	{
-		player.dx = 0;
-		player.dy = -player.speed;
-		break;
-	}
-
-	}
-
-	player.x += player.dx*time;
-	player.y += player.dy*time;
-
-	player.speed = 0;
-
-	player.elf.setPosition(player.x, player.y);
-	CheckPlayerCollision(player, time, counterCoins);
-}
-
-float ProcessInput(Player &player, float time)
-{
-	bool syncPlayerNeeded = false;
-
-	if ((Keyboard::isKeyPressed(Keyboard::Left))
-		|| (Keyboard::isKeyPressed(Keyboard::Right))
-		|| (Keyboard::isKeyPressed(Keyboard::Up))
-		|| (Keyboard::isKeyPressed(Keyboard::Down)))
-	{
-		player.speed = 0.2;
-		player.currentAnimationFrame += 0.005*time;
-		player.currentAnimationFrame = std::fmod(player.currentAnimationFrame, player.animationFramesCount);
-		syncPlayerNeeded = true;
-	}
-
-	if ((Keyboard::isKeyPressed(Keyboard::Left))) {
-		player.direction = Direction::LEFT;
-		player.elf.setTextureRect(IntRect(WIDTH_PLAYER * int(player.currentAnimationFrame), HEIGHT_PLAYER, WIDTH_PLAYER, HEIGHT_PLAYER));
-	}
-
-	if ((Keyboard::isKeyPressed(Keyboard::Right))) {
-		player.direction = Direction::RIGHT;
-		player.elf.setTextureRect(IntRect(WIDTH_PLAYER * int(player.currentAnimationFrame), 2 * HEIGHT_PLAYER, WIDTH_PLAYER, HEIGHT_PLAYER));
-	}
-
-
-	if ((Keyboard::isKeyPressed(Keyboard::Up))) {
-		player.direction = Direction::UP;
-		player.elf.setTextureRect(IntRect(WIDTH_PLAYER * int(player.currentAnimationFrame), 3 * HEIGHT_PLAYER, WIDTH_PLAYER, HEIGHT_PLAYER));
-	}
-
-	if ((Keyboard::isKeyPressed(Keyboard::Down))) {
-		player.direction = Direction::DOWN;
-		player.elf.setTextureRect(IntRect(WIDTH_PLAYER * int(player.currentAnimationFrame), 0 * HEIGHT_PLAYER, WIDTH_PLAYER, HEIGHT_PLAYER));
-	}
-
-	if (syncPlayerNeeded)
-	{
-		SyncPlayerPostion(player);
-	}
-
-	return player.currentAnimationFrame;
-}
-
 void DrawMap(Sprite &s_map, float &CurrentFrameMoney, float time, Sprite &s_money, RenderWindow &window)
 {
 	for (int i = 0; i < HEIGHT_MAP; i++)
@@ -219,10 +98,10 @@ void DrawMap(Sprite &s_map, float &CurrentFrameMoney, float time, Sprite &s_mone
 	if (CurrentFrameMoney > 7) CurrentFrameMoney -= 7;
 }
 
-void TimeGame(RenderWindow &window,Text &text, int gameTime)
+void TimeGame(RenderWindow &window,Text &text, int gameTime, int &timer)
 {
 	std::ostringstream gameTimeString;   
-	gameTimeString << gameTime;
+	gameTimeString << timer - gameTime;
 	text.setString("Time: " + gameTimeString.str());
 	text.setPosition(view.getCenter().x - 450, view.getCenter().y - 300);
 }
@@ -235,9 +114,35 @@ void CounterCoins(RenderWindow &window, Text &text1, int counterCoins)
 	text1.setPosition(view.getCenter().x + 300, view.getCenter().y - 300);
 }
 
+void EntitiesIntersection(Player const& player, vector<Nazgul*> &enemies, int & timer)
+{
+	vector<Nazgul*> ::iterator enemies1 = enemies.begin();
+	vector<Nazgul*> ::iterator enemies2;
+
+	for (enemies2 = enemies.begin(); enemies2 != enemies.end(); enemies2++) {
+		for (enemies1 = enemies.begin(); enemies1 != enemies.end(); enemies1++) 
+		{
+			if (((*enemies1)->rect.intersects((*enemies2)->rect)))
+			{
+				if (((*enemies1)->rect) != ((*enemies2)->rect))
+				{
+					(*enemies1)->direction = 3;
+					(*enemies2)->direction = 1;
+				}
+			}
+			else if (((*enemies1)->rect.intersects((player.rect))))
+			{
+				timer -= 1;
+				(*enemies1)->direction = abs((*enemies1)->direction - 2);
+			}
+		}
+	}
+}
+
 int main()
 {
 	Player player;
+	vector<Nazgul*> enemies;
 	RenderWindow window(sf::VideoMode(900, 600), "big game");
 	Menu(window);
 
@@ -282,11 +187,24 @@ int main()
 	player.elf.setTexture(herotexture);
 	player.elf.setTextureRect(IntRect(0, 0, WIDTH_PLAYER, HEIGHT_PLAYER));
 
+	Texture nazgultexture;
+	nazgultexture.loadFromFile("images/lord1.png");
+	Sprite nazgulsprite;
+	nazgulsprite.setTexture(nazgultexture);
+
+
 	int counterCoins = 0;
 	float CurrentFrameMoney = 0;
+	int timer = 180;
 	Clock clock;
 	Clock gameTimeClock;
 	int gameTime = 0;
+
+	enemies.push_back(new Nazgul(nazgulsprite, 100, 100, 1));
+	enemies.push_back(new Nazgul(nazgulsprite, 200, 250, 1));
+	enemies.push_back(new Nazgul(nazgulsprite, 56, 360, 1));
+	enemies.push_back(new Nazgul(nazgulsprite, 450, 295, 1));
+
 	music.play();
 	while (window.isOpen())
 	{
@@ -302,17 +220,24 @@ int main()
 			if (event.type == Event::Closed)
 				window.close();
 		}
-		/*if (player.life)
+		if (timer > 0)
 		{
-			
-		}*/
-		player.currentAnimationFrame = ProcessInput(player, time);
+			player.currentAnimationFrame = ProcessInput(player, time);
+		}
+		
 		
 		GetPlayerCoordinateForView(player.x, player.y);
-		Update(time, player, counterCoins);
+		UpdatePlayer(time, player, counterCoins, TileMap);
+		EntitiesIntersection(player, enemies, timer);
+
+		for (auto i : enemies)
+		{
+			NazgulUpdate(*i, time, TileMap);
+			i++;
+		}
 		s_fon.setPosition(view.getCenter().x - 450, view.getCenter().y - 300);
 
-		TimeGame(window, text, gameTime);
+		TimeGame(window, text, gameTime, timer);
 		CounterCoins(window, text1, counterCoins);
 
 		ViewMap(time, player);
@@ -322,6 +247,11 @@ int main()
 		DrawMap(s_map, CurrentFrameMoney, time, s_money, window);
 
 		DrawPlayer(window, &player);
+		for (auto i : enemies)
+		{
+			DrawNazgul(window, i);
+			i++;
+		}
 		window.draw(s_fon);
 		window.draw(text);
 		window.draw(text1);

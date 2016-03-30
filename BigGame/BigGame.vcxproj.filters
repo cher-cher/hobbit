@@ -21,6 +21,9 @@
     <ClCompile Include="player.cpp">
       <Filter>Заголовочные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="nazgul.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="map.h">
@@ -33,6 +36,9 @@
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
     <ClInclude Include="const.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="nazgul.h">
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
   </ItemGroup>
