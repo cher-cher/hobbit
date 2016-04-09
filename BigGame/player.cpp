@@ -2,6 +2,7 @@
 #include <iostream> 
 #include "player.h"
 #include "const.h"
+
 //#include "map.h"
 
 void DrawPlayer(RenderWindow & window, Player * player)
@@ -16,12 +17,12 @@ Position SyncPlayerPostion(Player & player)
 	player.y = pos.y;
 	return Position(player.x, player.y);
 }
-void CheckPlayerCollision(Player & player, float time, int &counterCoins, String TileMap[])
+void CheckPlayerCollision(Player & player, float time, int &counterCoins, Game & game, vector<string> & TileMap)
 {
 	for (int i = player.y / SIZE_BLOCK; i < (player.y + HEIGHT_PLAYER) / SIZE_BLOCK; i++)
 		for (int j = player.x / SIZE_BLOCK; j < (player.x + WIDTH_PLAYER) / SIZE_BLOCK; j++)
 		{
-			if (TileMap[i][j] == 'w')
+			if ((TileMap[i][j] == 'w') || (TileMap[i][j] == 'n'))
 			{
 				Vector2f pos = player.elf.getPosition();
 				if (player.dy > 0)
@@ -52,6 +53,10 @@ void CheckPlayerCollision(Player & player, float time, int &counterCoins, String
 				TileMap[i][j] = 's';
 				counterCoins += 1;
 			}
+			if (TileMap[i][j] == 'e')
+			{
+				game.restart = true;
+			}
 		}
 }
 
@@ -60,7 +65,7 @@ FloatRect GetRect(Player & player)
 	return FloatRect(player.x, player.y, player.w, player.h);
 }
 
-void UpdatePlayer(float time, Player & player, int &counterCoins, String TileMap[])
+void UpdatePlayer(float time, Player & player, int &counterCoins, Game & game, vector<string> & TileMap)
 {
 	switch (player.direction)
 	{
@@ -99,7 +104,7 @@ void UpdatePlayer(float time, Player & player, int &counterCoins, String TileMap
 	player.speed = 0;
 
 	player.elf.setPosition(player.x, player.y);
-	CheckPlayerCollision(player, time, counterCoins, TileMap);
+	CheckPlayerCollision(player, time, counterCoins, game, TileMap);
 }
 float ProcessInput(Player &player, float time)
 {

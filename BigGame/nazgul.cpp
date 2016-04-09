@@ -5,17 +5,16 @@
 #include "const.h"
 #include <cmath>
 
-void DrawNazgul(RenderWindow & window, Nazgul * nazgul)
+void DrawNazgul(RenderWindow & window, Nazgul & nazgul)
 {
-	window.draw(nazgul->sprite);
+	window.draw(nazgul.sprite);
 }
 
-void NazgulCollision(Nazgul & nazgul, float & time, String TileMap[])
+void NazgulCollision(Nazgul & nazgul, float & time, vector<string> & TileMap)
 {
-	if ((nazgul.y < 0) || (nazgul.x < 0))
+	if ((nazgul.y < 0) || (nazgul.x < 0) || (nazgul.x > 900) || (nazgul.y > 600))
 	{
-		nazgul.y = 0;
-		nazgul.x = 0;
+		nazgul.life = false;
 	}
 	for (int i = nazgul.y / SIZE_BLOCK; i < (nazgul.y + HEIGHT_NAZGUL) / SIZE_BLOCK; i++)
 		for (int j = nazgul.x / SIZE_BLOCK; j < (nazgul.x + WIDTH_NAZGUL) / SIZE_BLOCK; j++)
@@ -54,7 +53,7 @@ FloatRect GetRect(Nazgul & nazgul)
 	return FloatRect(nazgul.x, nazgul.y, nazgul.w, nazgul.h);
 }
 
-void NazgulUpdate(Nazgul & nazgul, float & time, String TileMap[])
+void NazgulUpdate(Nazgul & nazgul, float & time, vector<string> & TileMap)
 {
 
 	switch (nazgul.direction)
@@ -88,8 +87,9 @@ void NazgulUpdate(Nazgul & nazgul, float & time, String TileMap[])
 
 	}
 
-	nazgul.x += nazgul.dx*time;
-	nazgul.y += nazgul.dy*time;
+	nazgul.x += nazgul.dx * time;
+	nazgul.y += nazgul.dy * time;
+	
 	nazgul.sprite.setPosition(nazgul.x, nazgul.y);
 	NazgulCollision(nazgul, time, TileMap);
 	nazgul.rect = { (int)nazgul.x, (int)nazgul.y, WIDTH_NAZGUL, HEIGHT_NAZGUL };

@@ -3,7 +3,7 @@
 const int SIZE_BLOCK = 32;
 const int HEIGHT_PLAYER = 53;
 const int WIDTH_PLAYER = 38;
-const int HEIGHT_MAP = 35;//размер карты высота
+const int HEIGHT_MAP = 36;//размер карты высота
 const int WIDTH_MAP = 70;//размер карты ширина 
 const int WIDTH_NAZGUL = 33;
 const int HEIGHT_NAZGUL = 58;

@@ -1,11 +1,10 @@
 ﻿#ifndef Map_H 
 #define Map_H
-#include <SFML\Graphics.hpp>
 #include "const.h"
+#include "game.h"
+#include <string>
 
-using namespace sf;
-
-String TileMap[HEIGHT_MAP] = {
+vector<string> TileMap1 = {
 	"wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww",
 	"wssmssssssssmsssssswssssssssssswsswssssssssswsssssssmsswssssmssssssssw",
 	"wsssssssssssssssssswssssssssmsswsswssssmsssswwsssmssssswsssssssssssssw",
@@ -40,6 +39,48 @@ String TileMap[HEIGHT_MAP] = {
 	"wsmsswssssssssssswssssssssssssssssssssssssssswssssssssswwwwwwwwwwwwwww",
 	"wssssssssswsssssssssssssssmssssssssswsssssssssssssswssssssssssssmssssw",
 	"wssssssssswsssmssssssssssssssssssssswsssssssssssssswsssssssmsssssssssw",
+	"wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwexwww",
+	"nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn",
+};
+
+
+string TileMap2[HEIGHT_MAP] = {
 	"wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww",
-	};
+	"wssssswsssssmsssssswssssssssssswsswssssssssswsssssssmsswssssmssssssssw",
+	"wssssswsssssssssssswssssssssmsswsswssssmsssswwsssmssssswsssssssssssssw",
+	"wsssswwwwwwwwsswwwwwsswwwwssssswsswwwwwwwwssswwwwwwwssswwwwwwssswssssw",
+	"wsssswsmsssswsswsssssswsswssssswsswsssssswssswsswsswssswsswssssswwsssw",
+	"wsssswssssmswsswsssssswsswwwwwwwsswsssssswsswwsswsswssswsswssmssswsssw",
+	"wsswwwsswwsswsswsswwwwwsswsssssssswwwwwsswssssssssswsswwsswsssssswsssw",
+	"wsswssssswsswsswsswsssssswsssssssswsmswsswsssmsssssssssssswwwwwwwwsssw",
+	"wsswssssswsswsswsswssssswwsswssssswssswsswsssssswssssmsssssssssssssssw",
+	"wsswsswwwwsswsswsswwwwsswssswwwwwwwsssssssmssssswsswsswsssssssmssssssw",
+	"wsswwwwssssswsswsssssssswssswssssssssssssssssssswssssswsswwwwwwwwwwssw",
+	"wssmsswssssswsswsssssssswssswsmssssssswsswwwwwwwwssssswsswsssswssswssw",
+	"wssssswsswwwwsswwwwssssswssswsssswsssswsssssssssssmssswsswsssswssmsssw",
+	"wssssswsssswsssssssssssswssswwwwwwsssswssssssmsssssssswsswsssswssssssw",
+	"wsswssssssswsssssssssssswssssssssssssswssswwwwwwwwwwwwwsswsssswssssssw",
+	"wsswssssssswsswssswwwwwwwsssssssssssswwssssswsswssssssssswsssswwwwwwww",
+	"wsswwwwwwwwwsswsssssssssssswssssssswwwsssssswsswssmsssssswsssssssssssw",
+	"wssssssssssssswsssssssssssswwwwwwwwwssssmssswsswssssssssswsssssssssssw",
+	"wssssssssssssswsssssswssssssswsssssssssssssswsswwwwssswwwwsswwwwwwwssw",
+	"wssssswwwwwwwwwsssssswwwwsssswssssmssssssssswssmsssssssssssswssmsswssw",
+	"wssssswsssswsswwwwwwwwsswsssswwwwssswwwwwwwwwsssssssssmssssswssssswssw",
+	"wssmsswsssswsssssssssssswsssswsswssswsssssssssssswwwwwwwsswwwsswwwwssw",
+	"wssssswwssswssssmssssssswsssswsswssswsssssssssssswssswsssssswsssmssssw",
+	"wsswssswssswsssssswssssswsswwwsswssswsssswwwwsssswssswsssssswssssssssw",
+	"wsswssswssswwwwwwwwssssswssssssswssswsssswsswwwwwwssswsssssswwwwwwwwww",
+	"wsswwwwwssssswssswsssssswssssssswssswssmswssswssswsmswsssssssssssssssw",
+	"wsssssssssssswssswssswwwwssssssswsswwsssswssswssswssswsssssssssssssssw",
+	"wsssssmsssssswssswssssswssssmssswsssssssswssswssssssswsssssswsssmssssw",
+	"wsssssssssssswssswssssssssmssssswsssssssswssswssssssswwwwwwwwssssssssw",
+	"wsssswwwwwwwwwsmswsssssssssssssswwwwwwwwwwssswssssssssswsssssssssssssw",
+	"wsssswssssssssssswssssswwwwwwwwwwsssssssssssswssssmsssswsssssssssssssw",
+	"wsmsswssssssssssswssssssssssssssssssssssssssswssssssssswwwwwwwwwwwwwww",
+	"wssssssssswsssssssssssssssmssssssssswsssssssssssssswssssssssssssmssssw",
+	"wssssssssswsssmssssssssssssssssssssswsssssssssssssswsssssssmsssssssssw",
+	"wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwexwww",
+	"nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn",
+};
+
 #endif
