@@ -114,7 +114,7 @@ void CounterCoins(RenderWindow &window, Text &text1, int counterCoins)
 	text1.setPosition(view.getCenter().x + 300, view.getCenter().y - 300);
 }
 
-void EntitiesIntersection(Player const& player, vector<Nazgul*> &enemies, int & timer)
+void EntitiesIntersection(Player & player, vector<Nazgul*> &enemies, int & timer)
 {
 	vector<Nazgul*> ::iterator enemies1 = enemies.begin();
 	vector<Nazgul*> ::iterator enemies2;
@@ -132,8 +132,43 @@ void EntitiesIntersection(Player const& player, vector<Nazgul*> &enemies, int & 
 			}
 			else if (((*enemies1)->rect.intersects((player.rect))))
 			{
-				timer -= 1;
-				(*enemies1)->direction = abs((*enemies1)->direction - 2);
+				//timer -= 10;
+				if ((*enemies1)->dx > 0)
+				{
+					(*enemies1)->x = player.x - WIDTH_NAZGUL;
+					(*enemies1)->direction = rand() % 4;
+					if (player.dx < 0)
+					{
+						player.x = (*enemies1)->x + WIDTH_NAZGUL;
+					}
+				}
+				if ((*enemies1)->dx < 0)
+				{
+					(*enemies1)->x = player.x + WIDTH_NAZGUL;
+					(*enemies1)->direction = rand() % 4;
+					if (player.dx > 0)
+					{
+						player.x = (*enemies1)->x - WIDTH_NAZGUL;
+					}
+				}
+				if ((*enemies1)->dy > 0)
+				{
+					(*enemies1)->y = player.y - HEIGHT_NAZGUL;
+					(*enemies1)->direction = rand() % 4;
+					if (player.dy < 0)
+					{
+						player.y = (*enemies1)->y + HEIGHT_NAZGUL;
+					}
+				}
+				if ((*enemies1)->dy < 0)
+				{
+					(*enemies1)->y = player.y + HEIGHT_NAZGUL;
+					(*enemies1)->direction = rand()%4;
+					if (player.dy > 0)
+					{
+						player.y = (*enemies1)->y - HEIGHT_NAZGUL;
+					}
+				}
 			}
 		}
 	}
@@ -143,7 +178,7 @@ int main()
 {
 	Player player;
 	vector<Nazgul*> enemies;
-	RenderWindow window(sf::VideoMode(900, 600), "big game");
+	RenderWindow window(sf::VideoMode(900, 600), "hobbit");
 	Menu(window);
 
 	view.reset(FloatRect(0, 0, 900, 600));
@@ -203,7 +238,9 @@ int main()
 	enemies.push_back(new Nazgul(nazgulsprite, 100, 100, 1));
 	enemies.push_back(new Nazgul(nazgulsprite, 200, 250, 1));
 	enemies.push_back(new Nazgul(nazgulsprite, 56, 360, 1));
-	enemies.push_back(new Nazgul(nazgulsprite, 450, 295, 1));
+	enemies.push_back(new Nazgul(nazgulsprite, 120, 150, 1));
+	enemies.push_back(new Nazgul(nazgulsprite, 147, 360, 1));
+	enemies.push_back(new Nazgul(nazgulsprite, 85, 74, 1));
 
 	music.play();
 	while (window.isOpen())

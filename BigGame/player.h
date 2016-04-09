@@ -27,6 +27,8 @@ struct Player
 	Sprite elf;
 	float x = 100;
 	float y = 100;
+	float w;
+	float h;
 	float dx;
 	float dy;
 	Direction direction = Direction::RIGHT;
@@ -39,6 +41,7 @@ struct Player
 Position SyncPlayerPostion(Player & player);
 void DrawPlayer(RenderWindow &window, Player * player);
 void CheckPlayerCollision(Player & player, float time, int &counterCoins, String TileMap[]);
+FloatRect GetRect(Player & player);
 void UpdatePlayer(float time, Player & player, int &counterCoins, String TileMap[]);
 float ProcessInput(Player &player, float time);
 #endif

@@ -54,6 +54,12 @@ void CheckPlayerCollision(Player & player, float time, int &counterCoins, String
 			}
 		}
 }
+
+FloatRect GetRect(Player & player)
+{
+	return FloatRect(player.x, player.y, player.w, player.h);
+}
+
 void UpdatePlayer(float time, Player & player, int &counterCoins, String TileMap[])
 {
 	switch (player.direction)

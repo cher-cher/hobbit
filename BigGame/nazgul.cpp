@@ -12,6 +12,11 @@ void DrawNazgul(RenderWindow & window, Nazgul * nazgul)
 
 void NazgulCollision(Nazgul & nazgul, float & time, String TileMap[])
 {
+	if ((nazgul.y < 0) || (nazgul.x < 0))
+	{
+		nazgul.y = 0;
+		nazgul.x = 0;
+	}
 	for (int i = nazgul.y / SIZE_BLOCK; i < (nazgul.y + HEIGHT_NAZGUL) / SIZE_BLOCK; i++)
 		for (int j = nazgul.x / SIZE_BLOCK; j < (nazgul.x + WIDTH_NAZGUL) / SIZE_BLOCK; j++)
 		{
@@ -42,6 +47,11 @@ void NazgulCollision(Nazgul & nazgul, float & time, String TileMap[])
 				nazgul.direction = rand() % 4;
 			}
 		}
+}
+
+FloatRect GetRect(Nazgul & nazgul)
+{
+	return FloatRect(nazgul.x, nazgul.y, nazgul.w, nazgul.h);
 }
 
 void NazgulUpdate(Nazgul & nazgul, float & time, String TileMap[])

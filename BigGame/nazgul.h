@@ -9,6 +9,8 @@ struct Nazgul
 	Sprite sprite;
 	float x;
 	float y;
+	float w;
+	float h;
 	float dx;
 	float dy;
 	int direction;
@@ -26,4 +28,5 @@ struct Nazgul
 
 void DrawNazgul(RenderWindow & window, Nazgul * nazgul);
 void NazgulCollision(Nazgul & nazgul, float & time, String TileMap[]);
+FloatRect GetRect(Nazgul & nazgul);
 void NazgulUpdate(Nazgul & nazgul, float & time, String TileMap[]);
