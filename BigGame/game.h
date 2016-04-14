@@ -11,4 +11,7 @@ struct Game
 	bool restart = false;
 	int counterCoins = 0;
 	int timer = 180;
+	bool ring = false;
+	bool findRing = false;
+	bool invisibleMood = false;
 };

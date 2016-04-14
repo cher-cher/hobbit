@@ -31,17 +31,22 @@ struct Player
 	float h;
 	float dx;
 	float dy;
-	Direction direction = Direction::RIGHT;
+	Direction direction = Direction::DOWN;
 	float speed = 0;
 	int health = 100;
 	bool life = true;
 	IntRect rect;
+	Player()
+	{
+		elf.setPosition(x, y);
+	}
 };
 
 Position SyncPlayerPostion(Player & player);
+void SyncPlayerSprite(Player & player);
 void DrawPlayer(RenderWindow &window, Player * player);
 void CheckPlayerCollision(Player & player, float time, int &counterCoins, Game & game, vector<string> & TileMap);
 FloatRect GetRect(Player & player);
 void UpdatePlayer(float time, Player & player, int &counterCoins, Game & game, vector<string> & TileMap);
-float ProcessInput(Player &player, float time);
+float ProcessInput(Player &player, float time, Game & game);
 #endif

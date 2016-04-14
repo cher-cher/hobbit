@@ -2,6 +2,8 @@
 #include <iostream> 
 #include "const.h"
 #include <string>
+#include <vector>
+#include "player.h"
 
 using namespace sf;
 using namespace std;
@@ -20,13 +22,13 @@ struct Nazgul
 	float speed = 0.1;
 	bool life;
 	Nazgul(Sprite & spr, float posX, float posY, int dir)
+		: life(true)
+		, x(posX)
+		, y(posY)
+		, direction(dir)
+		, sprite(spr)
+		, rect({ (int)x, (int)y, WIDTH_NAZGUL, HEIGHT_NAZGUL })
 	{
-		life = true;
-		x = posX;
-		y = posY;
-		direction = dir;
-		sprite = spr;
-		rect = {(int)x, (int)y, WIDTH_NAZGUL, HEIGHT_NAZGUL};
 		sprite.setTextureRect(IntRect(WIDTH_NAZGUL, 0, WIDTH_NAZGUL, HEIGHT_NAZGUL));
 	}
 };
@@ -34,4 +36,5 @@ struct Nazgul
 void DrawNazgul(RenderWindow & window, Nazgul & nazgul);
 void NazgulCollision(Nazgul & nazgul, float & time, vector<string> & TileMap);
 FloatRect GetRect(Nazgul & nazgul);
-void NazgulUpdate(Nazgul & nazgul, float & time, vector<string> & TileMap);
+void NazgulUpdate(Nazgul & nazgul, float & time, vector<string> & TileMap, Game & game, Player & player);
+void AttackMode(Player & player, Nazgul & nazgul, float time);

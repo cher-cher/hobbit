@@ -8,11 +8,6 @@ View view;
 void GetPlayerCoordinateForView(float x, float y) { //функция для считывания координат игрока
 	float tempX = x; float tempY = y;//считываем коорд игрока и проверяем их, чтобы убрать края
 
-	/*if (x < 450) tempX = 450;
-	if (x > 1790) tempX = 1790;
-	if (y < 300) tempY = 300;
-	if (y > 820) tempY = 820;*/
-
 	view.setCenter(tempX, tempY); //следим за игроком, передавая его координаты. 
 }
 

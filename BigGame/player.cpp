@@ -3,8 +3,6 @@
 #include "player.h"
 #include "const.h"
 
-//#include "map.h"
-
 void DrawPlayer(RenderWindow & window, Player * player)
 {
 	window.draw(player->elf);
@@ -17,12 +15,21 @@ Position SyncPlayerPostion(Player & player)
 	player.y = pos.y;
 	return Position(player.x, player.y);
 }
+
+void SyncPlayerSprite(Player & player)
+{
+	Vector2f pos;
+	pos.x = player.x;
+	pos.y = player.y;
+	player.elf.setPosition(pos);
+}
+
 void CheckPlayerCollision(Player & player, float time, int &counterCoins, Game & game, vector<string> & TileMap)
 {
 	for (int i = player.y / SIZE_BLOCK; i < (player.y + HEIGHT_PLAYER) / SIZE_BLOCK; i++)
 		for (int j = player.x / SIZE_BLOCK; j < (player.x + WIDTH_PLAYER) / SIZE_BLOCK; j++)
 		{
-			if ((TileMap[i][j] == 'w') || (TileMap[i][j] == 'n'))
+			if ((TileMap[i][j] == 'w') || (TileMap[i][j] == 'k') ||  (TileMap[i][j] == 'n'))
 			{
 				Vector2f pos = player.elf.getPosition();
 				if (player.dy > 0)
@@ -47,15 +54,20 @@ void CheckPlayerCollision(Player & player, float time, int &counterCoins, Game &
 				}
 				player.elf.setPosition(pos);
 			}
-
-			if (TileMap[i][j] == 'm')
+			else if (TileMap[i][j] == 'm')
 			{
 				TileMap[i][j] = 's';
 				counterCoins += 1;
 			}
-			if (TileMap[i][j] == 'e')
+			else if (TileMap[i][j] == 'r')
+			{
+				game.findRing = true;
+				TileMap[i][j] = 's';
+			}
+			else if (TileMap[i][j] == 'e' && (game.ring == true))
 			{
 				game.restart = true;
+				game.level = 2;
 			}
 		}
 }
@@ -93,20 +105,16 @@ void UpdatePlayer(float time, Player & player, int &counterCoins, Game & game, v
 		player.dy = -player.speed;
 		break;
 	}
-
 	}
-
 	player.x += player.dx*time;
 	player.y += player.dy*time;
 
-	player.rect = { (int)player.x, (int)player.y, WIDTH_PLAYER, HEIGHT_PLAYER};
-
 	player.speed = 0;
-
-	player.elf.setPosition(player.x, player.y);
 	CheckPlayerCollision(player, time, counterCoins, game, TileMap);
+	player.elf.setPosition(player.x, player.y);
+	player.rect = { (int)player.x, (int)player.y, WIDTH_PLAYER, HEIGHT_PLAYER };
 }
-float ProcessInput(Player &player, float time)
+float ProcessInput(Player &player, float time, Game & game)
 {
 	bool syncPlayerNeeded = false;
 
@@ -141,7 +149,14 @@ float ProcessInput(Player &player, float time)
 		player.direction = Direction::DOWN;
 		player.elf.setTextureRect(IntRect(WIDTH_PLAYER * int(player.currentAnimationFrame), 0 * HEIGHT_PLAYER, WIDTH_PLAYER, HEIGHT_PLAYER));
 	}
-
+	if ((Keyboard::isKeyPressed(Keyboard::Tab)) && game.ring)
+	{
+		game.invisibleMood = true;
+	}
+	if ((Keyboard::isKeyPressed(Keyboard::Escape)))
+	{
+		game.invisibleMood = false;
+	}
 	if (syncPlayerNeeded)
 	{
 		SyncPlayerPostion(player);
