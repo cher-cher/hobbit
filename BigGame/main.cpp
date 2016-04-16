@@ -197,7 +197,7 @@ void TimeGame(RenderWindow &window,Text &text, int gameTime, int &timer)
 {
 	std::ostringstream gameTimeString;   
 	gameTimeString << timer - gameTime;
-	text.setString("Time: " + gameTimeString.str());
+	text.setString("Время: " + gameTimeString.str());
 	text.setPosition(view.getCenter().x - 450, view.getCenter().y - 300);
 }
 
@@ -205,8 +205,8 @@ void CounterCoins(RenderWindow &window, Text &text1, int counterCoins)
 {
 	std::ostringstream gameCounterCoinsString;
 	gameCounterCoinsString << counterCoins;
-	text1.setString("Coins: " + gameCounterCoinsString.str());
-	text1.setPosition(view.getCenter().x + 300, view.getCenter().y - 300);
+	text1.setString("Монеты: " + gameCounterCoinsString.str());
+	text1.setPosition(view.getCenter().x + 280, view.getCenter().y - 300);
 }
 
 void EntitiesIntersection(Game & game, Player & player, vector<Nazgul> &enemies, int & timer, float time)
@@ -340,10 +340,6 @@ void SetLevel(Game & game, vector<string> & TileMap)
 	}
 }
 
-void DrawRingAnimation(RenderWindow & window, Game * game, Sprite & s_ring, float time)
-{
-	
-}
 bool StartGame(Game & game, RenderWindow & window)
 {
 	vector<string> TileMap;
@@ -397,13 +393,13 @@ bool StartGame(Game & game, RenderWindow & window)
 	s_fon.setTexture(fons);
 
 	Font font;
-	font.loadFromFile("font4.ttf");
-	Text text("", font, 30);
+	font.loadFromFile("anicb___.ttf");
+	Text text("", font, 20);
 	text.setColor(Color::White);
 
 	Font font1;
-	font1.loadFromFile("font4.ttf");
-	Text text1("", font, 30);
+	font1.loadFromFile("anicb___.ttf");
+	Text text1("", font, 20);
 	text1.setColor(Color::White);
 
 	Music music;
