@@ -13,5 +13,6 @@ struct Game
 	int timer = 180;
 	bool ring = false;
 	bool findRing = false;
+	bool findArk = false;
 	bool invisibleMood = false;
 };

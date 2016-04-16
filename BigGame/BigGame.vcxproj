@@ -149,7 +149,7 @@
       <AdditionalIncludeDirectories>I:\SDK\SFML-Visual Studio-2015RC-64\SFML-Visual_Studio2015RCx64\include;C:\sdk\SFML-2.3.2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>

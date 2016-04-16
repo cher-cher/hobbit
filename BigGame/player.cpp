@@ -64,6 +64,11 @@ void CheckPlayerCollision(Player & player, float time, int &counterCoins, Game &
 				game.findRing = true;
 				TileMap[i][j] = 's';
 			}
+			else if (TileMap[i][j] == 'a')
+			{
+				game.findArk = true;
+				TileMap[i][j] = 's';
+			}
 			else if (TileMap[i][j] == 'e' && (game.ring == true))
 			{
 				game.restart = true;

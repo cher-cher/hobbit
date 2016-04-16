@@ -137,7 +137,7 @@ void Menu(RenderWindow & window)
 	}
 }
 
-void DrawMap(Sprite &s_map, float &CurrentFrameMoney, float & CurrentFrameRing, float time, Sprite &s_money, Sprite &s_ring, RenderWindow &window, Game & game, vector<string> const& TileMap) 
+void DrawMap(Sprite &s_ark, Sprite &s_map, float &CurrentFrameMoney, float & CurrentFrameRing, float & CurrentFrameArk, float time, Sprite &s_money, Sprite &s_ring, RenderWindow &window, Game & game, vector<string> const& TileMap)
 {
 	for (int i = 0; i < HEIGHT_MAP; i++)
 	{
@@ -173,6 +173,12 @@ void DrawMap(Sprite &s_map, float &CurrentFrameMoney, float & CurrentFrameRing, 
 				s_money.setPosition(j * SIZE_BLOCK, i * SIZE_BLOCK);
 				window.draw(s_money);
 			}
+			if (TileMap[i][j] == 'a')
+			{
+				s_ark.setTextureRect(IntRect(SIZE_BLOCK * int(CurrentFrameArk), 0, SIZE_BLOCK, SIZE_BLOCK));
+				s_ark.setPosition(j * SIZE_BLOCK, i * SIZE_BLOCK);
+				window.draw(s_ark);
+			}
 			if (TileMap[i][j] == 'r')
 				{
 				s_ring.setTextureRect(IntRect(SIZE_BLOCK * int(CurrentFrameRing), 0, SIZE_BLOCK, SIZE_BLOCK));
@@ -187,6 +193,8 @@ void DrawMap(Sprite &s_map, float &CurrentFrameMoney, float & CurrentFrameRing, 
 			}
 		}
 	}
+	CurrentFrameArk += time * 0.015;
+	if (CurrentFrameArk > 3) CurrentFrameArk -= 3;
 	CurrentFrameMoney += time * 0.015;
 	if (CurrentFrameMoney > 7) CurrentFrameMoney -= 7;
 	CurrentFrameRing += time * 0.01;
@@ -248,7 +256,8 @@ void EntitiesIntersection(Game & game, Player & player, vector<Nazgul> &enemies,
 		{
 			if ((enemies2->rect.intersects((player.rect))))
 			{
-				Vector2f pos = player.elf.getPosition();
+				player.life = false;
+				/*Vector2f pos = player.elf.getPosition();
 				if (enemies2->dx > 0)
 				{
 					if (enemies2->direction == 0)
@@ -308,7 +317,7 @@ void EntitiesIntersection(Game & game, Player & player, vector<Nazgul> &enemies,
 					{
 						player.y -= player.dy*time;
 					}
-				}
+				}*/
 				SyncPlayerSprite(player);
 			}
 		}
@@ -361,6 +370,13 @@ bool StartGame(Game & game, RenderWindow & window)
 	Sprite s_money;
 	s_money.setTexture(money);
 
+	Image ark_image;
+	ark_image.loadFromFile("images/arkenstone.png");
+	Texture ark;
+	ark.loadFromImage(ark_image);
+	Sprite s_ark;
+	s_ark.setTexture(ark);
+
 	Image ring_image;
 	ring_image.loadFromFile("images/ring.png");
 	Texture ring;
@@ -392,6 +408,13 @@ bool StartGame(Game & game, RenderWindow & window)
 	Sprite s_fon;
 	s_fon.setTexture(fons);
 
+	Image gendalf_image;
+	gendalf_image.loadFromFile("images/gendalf1.png");
+	Texture gendalf;
+	gendalf.loadFromImage(gendalf_image);
+	Sprite s_gendalf;
+	s_gendalf.setTexture(gendalf);
+
 	Font font;
 	font.loadFromFile("anicb___.ttf");
 	Text text("", font, 20);
@@ -405,6 +428,9 @@ bool StartGame(Game & game, RenderWindow & window)
 	Music music;
 	music.openFromFile("audio/main theme.wav");
 
+	Music voiceGendalf;
+	voiceGendalf.openFromFile("audio/not_pass.ogg");
+
 	Texture herotexture;
 	herotexture.loadFromFile("images/hero1.png");
 	player.elf.setTexture(herotexture);
@@ -415,14 +441,17 @@ bool StartGame(Game & game, RenderWindow & window)
 	Sprite nazgulsprite;
 	nazgulsprite.setTexture(nazgultexture);
 
-	float CurrentFrameMoney = 0;
-	float CurrentFrameRing = 0;
 	game.restart = false;
 	Clock clock;
 	Clock gameTimeClock;
 	int gameTime = 0;
+
+	float CurrentFrameMoney = 0;
+	float CurrentFrameRing = 0;
 	float CurrentFrameHand = 0;
 	float CurrentFrameFon = 0;
+	float CurrentFrameArk = 0;
+	float CurrentFrameGendalf = 0;
 
 	SetLevel(game, TileMap);
 
@@ -450,7 +479,7 @@ bool StartGame(Game & game, RenderWindow & window)
 				return false;
 			}
 		}
-		if (game.timer > 0)
+		if (game.timer > 0 && player.life)
 		{
 			player.currentAnimationFrame = ProcessInput(player, time, game);
 		}
@@ -484,13 +513,14 @@ bool StartGame(Game & game, RenderWindow & window)
 		window.setView(view);
 
 		window.clear();
-		DrawMap(s_map, CurrentFrameMoney, CurrentFrameRing, time, s_money, s_ring, window, game, TileMap);
+		DrawMap(s_ark,s_map, CurrentFrameMoney, CurrentFrameArk, CurrentFrameRing, time, s_money, s_ring, window, game, TileMap);
 		DrawPlayer(window, &player);
+
 		for (auto it : enemies)
 		{
 			DrawNazgul(window, it);
 		}
-		
+
 		if (!game.invisibleMood)
 		{
 			s_fon.setTextureRect(IntRect(0, 0, 900, 600));
@@ -533,6 +563,8 @@ bool StartGame(Game & game, RenderWindow & window)
 			CurrentFrameHand = 0;
 			CurrentFrameFon = 0;
 		}
+
+
 		if (game.findRing)
 		{
 			Vector2f pos = ringAnimSpr.getPosition();
@@ -567,8 +599,22 @@ bool StartGame(Game & game, RenderWindow & window)
 		{
 			ringAnimSpr.setPosition(player.x + 19, player.y);
 		}
+		//CurrentFrameGendalf = 0;
 		window.draw(text);
 		window.draw(text1);
+		if (!player.life)
+		{
+			cout << player.life << endl;
+			if (CurrentFrameGendalf < 13)
+			{
+				cout << CurrentFrameGendalf << endl;
+				CurrentFrameGendalf += time * 0.015;
+				s_gendalf.setTextureRect(IntRect(0, 600 * int(CurrentFrameGendalf), 900, 600));
+				s_gendalf.setPosition(view.getCenter().x - 450, view.getCenter().y - 300);
+				window.draw(s_gendalf);
+				voiceGendalf.play();
+			}
+		}
 		window.display();
 	}
 }

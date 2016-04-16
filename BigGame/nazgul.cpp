@@ -58,6 +58,11 @@ FloatRect GetRect(Nazgul & nazgul)
 	return FloatRect(nazgul.x, nazgul.y, nazgul.w, nazgul.h);
 }
 
+void RoadToHobbit(Nazgul & nazgul, Player & player)
+{
+
+}
+
 void NazgulUpdate(Nazgul & nazgul, float & time, vector<string> & TileMap, Game & game, Player & player)
 {
 
